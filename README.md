@@ -3,6 +3,9 @@
 A mini customer support ticket system.  
 **Backend:** Node.js + Express + PostgreSQL &nbsp;|&nbsp; **Frontend:** React + Vite &nbsp;|&nbsp; **Tests:** Vitest
 
+# Video Demostration
+https://www.loom.com/share/6ca2e9bf34ee45c98b2c54af97fa62fd
+
 ---
 
 ## Getting Started
