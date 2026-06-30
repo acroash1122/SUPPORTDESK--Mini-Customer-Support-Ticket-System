@@ -1,0 +1,592 @@
+/* index.css — design tokens, layout, and all reusable component styles */
+
+/* ─── Tokens ──────────────────────────────────────────────────────────────────
+   Single source of truth for every color, radius, and shadow used in the app.
+   Change a value here and it propagates everywhere.
+──────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Text */
+  --ink:        #111827;
+  --ink-2:      #374151;
+  --muted:      #6b7280;
+
+  /* Surfaces */
+  --surface:    #ffffff;
+  --ground:     #f9fafb;
+  --border:     #e5e7eb;
+
+  /* Accent (primary blue) */
+  --accent:       #2563eb;
+  --accent-bg:    #eff6ff;
+  --accent-hover: #1d4ed8;
+  --accent-ring:  rgba(37, 99, 235, 0.12);
+
+  /* Semantic colours */
+  --red:           #dc2626;
+  --red-bg:        #fef2f2;
+  --red-border:    #fecaca;
+  --amber:         #b45309;
+  --amber-bg:      #fffbeb;
+  --amber-border:  #fde68a;
+  --green:         #166534;
+  --green-bg:      #f0fdf4;
+  --green-border:  #bbf7d0;
+  --purple:        #6d28d9;
+  --purple-bg:     #f5f3ff;
+  --purple-border: #ddd6fe;
+
+  /* Shape */
+  --radius-sm: 4px;
+  --radius:    6px;
+  --radius-lg: 8px;
+
+  /* Shadow — subtle; cards rely on borders instead */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow:    0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--ground);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── App shell: sidebar + main ──────────────────────────────────────────────
+   .layout wraps a fixed-width sidebar and a fluid content pane.
+   The sidebar is sticky so it stays in view while the content scrolls.
+──────────────────────────────────────────────────────────────────────────── */
+
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────────────── */
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-brand-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.sidebar-brand-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.sidebar-nav {
+  padding: 10px 0;
+  flex: 1;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 18px 4px;
+  display: block;
+}
+
+/* Each nav item is a button so keyboard nav works without extra ARIA */
+.nav-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s, border-color 0.1s;
+}
+
+.nav-item:hover {
+  color: var(--ink);
+  background: var(--ground);
+}
+
+/* Left border + tinted background signals the current view */
+.nav-item.active {
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Main content pane ───────────────────────────────────────────────────── */
+
+.main-content {
+  padding: 36px 48px;
+  max-width: 960px;
+  width: 100%;
+}
+
+/* ─── Page header ─────────────────────────────────────────────────────────── */
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────────
+   .btn-primary — filled accent, main actions
+   .btn-ghost   — bordered, secondary actions
+   .btn-sm      — compact size modifier
+──────────────────────────────────────────────────────────────────────────── */
+
+button { cursor: pointer; font-family: inherit; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover   { background: var(--accent-hover); }
+.btn-primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: var(--surface);
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover   { background: var(--ground); color: var(--ink); }
+.btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+/* ─── Forms ──────────────────────────────────────────────────────────────────
+   .form-row  — 2-column grid for short adjacent fields (e.g. name + email)
+   .form-group — standard single-column field wrapper
+──────────────────────────────────────────────────────────────────────────── */
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.form-group { margin-bottom: 18px; }
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+/* Red border on invalid fields — triggered by the .invalid class set in JS */
+.form-group input.invalid,
+.form-group textarea.invalid,
+.form-group select.invalid {
+  border-color: var(--red);
+}
+
+.form-group input.invalid:focus,
+.form-group textarea.invalid:focus,
+.form-group select.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+/* Per-field error message shown beneath the invalid input */
+.field-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+/* ─── Cards ───────────────────────────────────────────────────────────────────
+   .card            — bordered container, no shadow
+   .card-body       — default padded region
+   .card-section    — a padded section separated by a top border
+──────────────────────────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.card-body { padding: 24px; }
+
+.card-section {
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Table ───────────────────────────────────────────────────────────────── */
+
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; }
+
+th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--ground);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tbody tr { transition: background 0.08s; }
+tbody tr:hover td { background: var(--ground); }
+
+/* Urgent rows: red left border accent on the first cell instead of a
+   separate column — the indicator stays even when filters remove other cols. */
+tbody tr.row-urgent td:first-child {
+  border-left: 3px solid var(--red);
+  padding-left: 11px;
+}
+
+.cell-id {
+  font-family: 'Menlo', 'Consolas', monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cell-customer strong {
+  display: block;
+  font-weight: 600;
+}
+
+.cell-customer span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.cell-date {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ─── Badges ──────────────────────────────────────────────────────────────────
+   4px radius gives a chip shape; 20px would be a pill — chips suit a data
+   table better since they're less visually dominant.
+──────────────────────────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge-urgent   { background: var(--red-bg);     color: var(--red);    border-color: var(--red-border); }
+.badge-high     { background: var(--red-bg);     color: var(--red);    border-color: var(--red-border); }
+.badge-medium   { background: var(--amber-bg);   color: var(--amber);  border-color: var(--amber-border); }
+.badge-low      { background: var(--green-bg);   color: var(--green);  border-color: var(--green-border); }
+.badge-open     { background: var(--accent-bg);  color: var(--accent); border-color: #bfdbfe; }
+.badge-progress { background: var(--purple-bg);  color: var(--purple); border-color: var(--purple-border); }
+.badge-resolved { background: var(--green-bg);   color: var(--green);  border-color: var(--green-border); }
+
+/* ─── Filter bar ──────────────────────────────────────────────────────────── */
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Search input expands to fill available space */
+.filter-search { flex: 1; min-width: 200px; }
+
+/* ─── Dashboard stat cards ────────────────────────────────────────────────────
+   Five cards in a row; each gets a top-border colour to encode meaning at
+   a glance. Numbers are left-aligned and compact — not the giant centered
+   hero-number style.
+──────────────────────────────────────────────────────────────────────────── */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  border-top: 3px solid var(--stat-accent, var(--border));
+  padding: 16px 18px;
+}
+
+.stat-number {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Per-card accent colours set via inline CSS variable override */
+.stat-total    { --stat-accent: var(--accent); }
+.stat-open     { --stat-accent: #f59e0b; }
+.stat-progress { --stat-accent: var(--purple); }
+.stat-resolved { --stat-accent: #16a34a; }
+.stat-urgent   { --stat-accent: var(--red); }
+
+/* ─── Alerts ──────────────────────────────────────────────────────────────── */
+
+.alert {
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 13px;
+  border: 1px solid transparent;
+}
+
+.alert-info    { background: var(--accent-bg);  color: #1e40af; border-color: #bfdbfe; }
+.alert-warning { background: var(--amber-bg);   color: #92400e; border-color: var(--amber-border); }
+.alert-error   { background: var(--red-bg);     color: #991b1b; border-color: var(--red-border); }
+
+/* ─── Detail view structures ──────────────────────────────────────────────── */
+
+.detail-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.meta-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meta-value       { font-size: 14px; color: var(--ink); font-weight: 500; }
+.meta-value-muted { font-size: 13px; color: var(--ink-2); }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.description-text {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.subject-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ─── Inline status update ────────────────────────────────────────────────── */
+
+.status-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.status-select {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.status-select:disabled { opacity: 0.6; }
+
+/* ─── Empty / loading states ──────────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.loading-text { color: var(--muted); font-size: 13px; padding: 12px 0; }
+
+/* ─── Utilities ───────────────────────────────────────────────────────────── */
+
+.flex-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.muted    { color: var(--muted); }
+.text-sm  { font-size: 12px; }
+
+/* Inline text-link style for secondary actions that aren't full buttons */
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-btn:hover { color: var(--accent-hover); }
+.link-btn:disabled { opacity: 0.5; cursor: not-allowed; }
